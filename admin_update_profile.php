@@ -20,22 +20,19 @@ if(isset($_POST['update_profile'])){
    $update_profile = $conn->prepare("UPDATE `users` SET name = ?, email = ? WHERE id = ?");
    $update_profile->execute([$name, $email, $admin_id]);
 
-   $old_pass = $_POST['old_pass'];
-   $update_pass = md5($_POST['update_pass']);
-   $update_pass = filter_var($update_pass, FILTER_SANITIZE_STRING);
-   $new_pass = md5($_POST['new_pass']);
+
+   $new_pass = trim($_POST['new_pass']);
    $new_pass = filter_var($new_pass, FILTER_SANITIZE_STRING);
-   $confirm_pass = md5($_POST['confirm_pass']);
+   $confirm_pass = trim($_POST['confirm_pass']);
    $confirm_pass = filter_var($confirm_pass, FILTER_SANITIZE_STRING);
 
-   if(!empty($update_pass) AND !empty($new_pass) AND !empty($confirm_pass)){
-      if($update_pass != $old_pass){
-         $message[] = 'old password not matched!';
-      }elseif($new_pass != $confirm_pass){
+   if(!empty($new_pass) AND !empty($confirm_pass)){
+      if($new_pass != $confirm_pass){
          $message[] = 'confirm password not matched!';
       }else{
+         $comfirm_password_hash = password_hash($confirm_pass, PASSWORD_BCRYPT);
          $update_pass_query = $conn->prepare("UPDATE `users` SET password = ? WHERE id = ?");
-         $update_pass_query->execute([$confirm_pass, $admin_id]);
+         $update_pass_query->execute([$comfirm_password_hash, $admin_id]);
          $message[] = 'password updated successfully!';
       }
    }
@@ -77,9 +74,7 @@ if(isset($_POST['update_profile'])){
             <input type="email" name="email" value="<?= $fetch_profile['email']; ?>" placeholder="update email" required class="box">
          </div>
          <div class="inputBox">
-            <input type="hidden" name="old_pass" value="<?= $fetch_profile['password']; ?>">
-            <span>old password :</span>
-            <input type="password" name="update_pass" placeholder="enter previous password" class="box">
+            
             <span>new password :</span>
             <input type="password" name="new_pass" placeholder="enter new password" class="box">
             <span>confirm password :</span>

@@ -185,7 +185,7 @@ if(isset($_GET['year'])){
 <script>
 $(function(){
   $('#select_year').change(function(){
-    window.location.href = 'admin_sales.php?year='+$(this).val();
+    window.location.href = 'seller_sales.php?year='+$(this).val();
   });
 });
 </script>

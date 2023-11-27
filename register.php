@@ -110,7 +110,7 @@ if (isset($_POST["register"])) {
         }
     }
 }
-?>S
+?>
 
 
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -217,13 +217,16 @@ if (isset($_POST["register"])) {
 <script>
     const toggle = document.getElementById('togglePassword');
     const password = document.getElementById('password');
+   
 
     toggle.addEventListener('click', function(){
-        if(password.type === "password"){
+        if(password.type == "password"){
             password.type = 'text';
         }else{
             password.type = 'password';
         }
         this.classList.toggle('bi-eye');
     });
+
+    
 </script>
